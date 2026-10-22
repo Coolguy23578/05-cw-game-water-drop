@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Drop Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>charity: water - Water Drop Game</title>
+    <meta name="description" content="Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the bad drops before time runs out!">
+    <meta property="og:title" content="charity: water - Water Drop Game">
+    <meta property="og:description" content="Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the bad drops before time runs out!">
+    <link rel="icon" type="image/png" href="/img/water-can-transparent.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="game-wrapper">
-        <h1 class="game-title">Water Drop</h1>
-        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn">Start Game</button>
-        </div>
-        
-        <div id="game-container">
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+<body class="bg-[#f4f7f6] min-h-screen text-[#131313] font-['Plus_Jakarta_Sans',sans-serif] antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

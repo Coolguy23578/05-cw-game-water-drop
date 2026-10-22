@@ -1,0 +1,7 @@
+{
+  "name": "charity: water - Water Drop Game",
+  "description": "Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the bad drops before time runs out!",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
