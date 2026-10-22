@@ -1,19 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>charity: water - Water Drop Game</title>
-    <meta name="description" content="Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the bad drops before time runs out!">
-    <meta property="og:title" content="charity: water - Water Drop Game">
-    <meta property="og:description" content="Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the bad drops before time runs out!">
-    <link rel="icon" type="image/png" href="/img/water-can-transparent.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>charity: water - Water Drop Game</title>
+  <meta name="description" content="Catch the clean water drops and avoid the yellow dirty drops before time runs out!">
+  <meta property="og:title" content="charity: water - Water Drop Game">
+  <meta property="og:description" content="Interactive water drop catching game supporting charity: water. Catch the good drops and avoid the yellow dirty drops!">
+  <link rel="icon" type="image/png" href="/img/water-can-transparent.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-[#f4f7f6] min-h-screen text-[#131313] font-['Plus_Jakarta_Sans',sans-serif] antialiased">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+<body>
+  <div class="game-wrapper">
+    <!-- Brand Top Bar -->
+    <header class="brand-bar">
+      <div class="brand-logo-wrap">
+        <img
+          src="/img/cw_logo-horizontal.png"
+          alt="charity: water"
+          class="brand-logo"
+          onerror="this.style.display='none'"
+        >
+        <div class="brand-pill">
+          <img src="/img/water-can-transparent.png" alt="Can" style="width: 16px; height: 16px; object-fit: contain;">
+          <span>Water Drop</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div id="best-badge" class="best-badge">
+          🏆 Best: <span id="high-score">0</span>
+        </div>
+        <button id="rules-btn" class="icon-btn" title="How to Play" aria-label="How to play">❓</button>
+        <button id="mute-btn" class="icon-btn" title="Toggle Sound" aria-label="Toggle sound">🔊</button>
+      </div>
+    </header>
+
+    <!-- Title & Tagline -->
+    <div style="text-align: center;">
+      <h1 class="game-title">Water Drop 💧</h1>
+      <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
+    </div>
+
+    <!-- Score Panel -->
+    <div class="score-panel">
+      <div>
+        <span class="panel-label">Score:</span>
+        <span id="score" class="score-value">0</span>
+      </div>
+
+      <div>
+        <span class="panel-label">Time:</span>
+        <span id="time" class="time-value">30</span><span style="font-size: 14px; font-weight: 700; color: #64748b;">s</span>
+      </div>
+
+      <div id="btn-container">
+        <button id="start-btn">▶ Start Game</button>
+      </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container">
+      <!-- Decorative clouds -->
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <!-- In-game badges -->
+      <div class="container-badge badge-left">
+        <span style="color: #2E9DF7;">💧 Blue: +1</span>
+        <span style="color: #cbd5e1; margin: 0 4px;">|</span>
+        <span style="color: #B87B00;">⚠️ Yellow: -1</span>
+      </div>
+      <div class="container-badge badge-right">
+        Target: <strong style="color: #2E9DF7;">20 drops</strong>
+      </div>
+
+      <!-- Start Overlay Screen -->
+      <div id="start-overlay" class="overlay-screen">
+        <div class="overlay-card">
+          <div class="card-icon-wrap">
+            <img src="/img/water-can-transparent.png" alt="Jerry Can" class="card-icon">
+          </div>
+          <h2 class="overlay-title">Ready to Play?</h2>
+          <div class="overlay-instructions">
+            <div>
+              <span class="dot-blue"></span>
+              <span><strong>Move bucket</strong> to catch blue drops (<strong>+1</strong>).</span>
+            </div>
+            <div>
+              <span class="dot-yellow"></span>
+              <span style="color: #996500;"><strong>DODGE yellow dirty drops!</strong> Penalty is <strong>-1</strong>!</span>
+            </div>
+          </div>
+          <button id="overlay-start-btn" class="overlay-start-btn">▶ Start Game</button>
+          <span class="overlay-footnote">Control bucket with mouse, touch drag, or ← → keys</span>
+        </div>
+      </div>
+
+      <!-- Player Bucket (Static at bottom, water does NOT rise up) -->
+      <div id="player-bucket" style="left: calc(50% - 52px);">
+        <div class="bucket-handle">
+          <div class="bucket-grip"></div>
+        </div>
+        <div class="bucket-rim">
+          <div class="bucket-rim-water"></div>
+        </div>
+        <div class="bucket-body">
+          <div class="bucket-static-water"></div>
+          <div class="bucket-label">WATER CAN</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      Inspired by <a href="https://www.charitywater.org" target="_blank" rel="noopener noreferrer">charity: water</a> • 100% of public donations bring clean water to people in need.
+    </footer>
+  </div>
+
+  <!-- Game Over Modal -->
+  <div id="game-over-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div id="modal-ribbon" class="modal-ribbon ribbon-win">
+        <button id="close-modal-btn" class="modal-close-btn" aria-label="Close modal">✕</button>
+        <div id="modal-emoji" class="modal-emoji">🎉</div>
+        <h2 id="modal-heading" class="modal-heading">Victory! You Did It!</h2>
+        <p id="modal-sub" class="modal-sub">Target Reached (20+ Drops)</p>
+      </div>
+
+      <div class="modal-body">
+        <div id="modal-message-box" class="modal-message-box msg-win">
+          Congratulations!
+        </div>
+
+        <div class="modal-stats">
+          <div class="stat-item">
+            <span class="stat-title">Score</span>
+            <span id="final-score" class="stat-val stat-blue">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Best</span>
+            <span id="modal-high-score" class="stat-val stat-orange">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Clean</span>
+            <span id="modal-clean-drops" class="stat-val stat-green">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-title">Dirty Hits</span>
+            <span id="modal-dirty-drops" class="stat-val stat-red">0</span>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="play-again-btn" class="btn-primary">🔄 Play Again</button>
+          <button id="modal-dismiss-btn" class="btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules / How to Play Modal -->
+  <div id="rules-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-ribbon ribbon-rules">
+        <button id="close-rules-btn" class="modal-close-btn" aria-label="Close rules">✕</button>
+        <div class="modal-emoji" style="background: rgba(0,0,0,0.08);">🪣</div>
+        <h2 class="modal-heading" style="color: #131313;">How to Play</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="rules-list">
+          <div class="rule-row">
+            <div class="rule-icon ri-yellow">🪣</div>
+            <div class="rule-text">
+              <strong>Move Your Bucket</strong>
+              Slide your mouse, drag with touch, or press <kbd>←</kbd> <kbd>→</kbd> / <kbd>A</kbd> <kbd>D</kbd> keys to steer the clean water bucket across the bottom.
+            </div>
+          </div>
+
+          <div class="rule-row">
+            <div class="rule-icon ri-blue">💧</div>
+            <div class="rule-text">
+              <strong>Catch Good Drops (+1 Pt)</strong>
+              Catch falling blue drops in your bucket (or click them mid-air).
+            </div>
+          </div>
+
+          <div class="rule-row">
+            <div class="rule-icon ri-warning">⚠️</div>
+            <div class="rule-text">
+              <strong style="color: #996500;">Avoid Yellow Dirty Drops (-1 Pt)</strong>
+              Yellow drops represent contaminated runoff water. If one lands in your bucket or is clicked, you lose <strong>1 point (-1)</strong>!
+            </div>
+          </div>
+
+          <div class="rule-row">
+            <div class="rule-icon ri-target">🏆</div>
+            <div class="rule-text">
+              <strong>Target: 20 Points in 30 Seconds</strong>
+              Score 20 or higher to win and support the clean water mission!
+            </div>
+          </div>
+        </div>
+
+        <div class="rules-note">
+          <strong>charity: water</strong> brings clean and safe drinking water to people in developing countries. 100% of public donations directly fund water projects!
+        </div>
+
+        <button id="rules-got-it-btn" class="btn-primary" style="background-color: #131313;">Got it, Let's Play!</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>
